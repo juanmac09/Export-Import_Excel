@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Interfaces\IAuth;
-use App\Interfaces\IFiles;
+use App\Interfaces\IUser;
+use App\Interfaces\IUserExcelImport;
 use App\Services\AuthService;
-use App\Services\FileService;
+use App\Services\UserExecelImportService;
+use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,7 +18,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this -> app -> bind(IAuth::class,AuthService::class);
-        $this -> app -> bind(IFiles::class,FileService::class);
+        $this -> app -> bind(IUserExcelImport::class,UserExecelImportService::class);
+        $this -> app -> bind(IUser::class,UserService::class);
     }
 
     /**
