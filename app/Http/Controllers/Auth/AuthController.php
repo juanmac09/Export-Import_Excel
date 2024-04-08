@@ -15,7 +15,44 @@ class AuthController extends Controller
     }
 
     /**
-     * Login user
+     * Log in user.
+     *
+     * @OA\Post(
+     *     path="/api/auth/login",
+     *     summary="Log in user",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User credentials",
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+     *             @OA\Property(property="password", type="string", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful login",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Authenticated"),
+     *             @OA\Property(property="_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjZjODc3Y2Nm...")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The provided credentials are incorrect.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Internal server error.")
+     *         )
+     *     )
+     * )
      *
      * @param AuthRequest $request
      * @return \Illuminate\Http\JsonResponse

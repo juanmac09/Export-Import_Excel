@@ -2,15 +2,15 @@
 
 namespace App\Jobs;
 
-
+use App\Events\UploadUserFileEvent;
+use App\Interfaces\IMqttBasic;
 use App\Interfaces\IUserExcelImport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class UploadFileJob implements ShouldQueue
 {
@@ -21,10 +21,14 @@ class UploadFileJob implements ShouldQueue
      */
     public $file;
     public $userImportService;
-    public function __construct(IUserExcelImport $userImportService, $file)
+    public $email;
+    public $mqttService;
+    public function __construct(IUserExcelImport $userImportService,IMqttBasic $mqttService ,$file,$email)
     {
         $this->userImportService = $userImportService;
         $this->file = $file;
+        $this->email = $email;
+        $this ->mqttService = $mqttService; 
     }
 
     /**
@@ -37,5 +41,6 @@ class UploadFileJob implements ShouldQueue
     public function handle(): void
     {
         $this->userImportService->UserExcelImport($this->file);
+        $this -> mqttService -> publish('user/'.$this -> email,'Archivo cargado correctamente');
     }
 }
