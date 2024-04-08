@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\IUser;
-
 /**
  * @OA\Info(
  *     title="Excel export api",

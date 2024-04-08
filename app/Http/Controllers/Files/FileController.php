@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Files;
 
-use App\Events\UploadUserFileEvent;
+
 use App\Http\Controllers\Controller;
+use App\Http\Requests\exportFileRequest;
 use App\Http\Requests\UploadFileRequest;
 use App\Interfaces\IExcelExport;
-use App\Interfaces\IMqttBasic;
 use App\Interfaces\IUserExcelImport;
 use App\Jobs\UploadFileJob;
 use Illuminate\Support\Facades\Auth;
@@ -17,12 +17,10 @@ class FileController extends Controller
 
     public $userImportService;
     public $userExportService;
-    public $mqttService;
-    public function __construct(IUserExcelImport $userImportService, IExcelExport $userExportService, IMqttBasic $mqttService)
+    public function __construct(IUserExcelImport $userImportService, IExcelExport $userExportService)
     {
         $this->userImportService = $userImportService;
         $this->userExportService = $userExportService;
-        $this -> mqttService = $mqttService;
     }
     /**
      * Upload a file.
@@ -72,7 +70,8 @@ class FileController extends Controller
     {
         try {
             $file = $request->file('data');
-            UploadFileJob::dispatch($this->userImportService,$this -> mqttService ,$file->store('temp'),Auth::user() -> email);
+            UploadFileJob::dispatch($this->userImportService, $file->store('temp'), Auth::user()->email);
+
             return response()->json(['message' => 'Archive uploaded successfully'], 200);
         } catch (\Throwable $th) {
             return response()->json(['error' => 'error'], 500);
@@ -85,8 +84,28 @@ class FileController extends Controller
      * @OA\Get(
      *     path="/api/export/files",
      *     summary="Export file",
-     *     security={{"bearerAuth": {}}},  
+     *     security={{"bearerAuth": {}}},
      *     tags={"File"},
+     *     @OA\Parameter(
+     *         name="initial_date",
+     *         in="query",
+     *         description="Fecha inicial para el rango de exportación (YYYY-MM-DD HH:MM:SS)",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string",
+     *             format="date-time"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="deadline",
+     *         in="query",
+     *         description="Fecha límite para el rango de exportación (YYYY-MM-DD HH:MM:SS)",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string",
+     *             format="date-time"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
@@ -109,10 +128,10 @@ class FileController extends Controller
      *
      * @return mixed
      */
-    public function exportFile()
+    public function exportFile(exportFileRequest $request)
     {
         try {
-            return $this->userExportService->exportExcel();
+            return $this->userExportService->exportExcel($request->initial_date, $request->deadline);
         } catch (\Throwable $th) {
             return response()->json(['error' => 'error'], 500);
         }

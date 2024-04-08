@@ -173,6 +173,28 @@
                 "summary": "Export file",
                 "description": "Export file.",
                 "operationId": "b8d1028988623b4d2492ef4b3bb9672c",
+                "parameters": [
+                    {
+                        "name": "initial_date",
+                        "in": "query",
+                        "description": "Fecha inicial para el rango de exportación (YYYY-MM-DD HH:MM:SS)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "deadline",
+                        "in": "query",
+                        "description": "Fecha límite para el rango de exportación (YYYY-MM-DD HH:MM:SS)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",

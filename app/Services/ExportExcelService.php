@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ExportExcelService implements IExcelExport
 {
-    public function exportExcel(){
-        return Excel::download(new UsersExport, 'users.xlsx');
+    public function exportExcel( $initial_date, $deadline){
+        return Excel::download(new UsersExport($initial_date,$deadline), 'users.xlsx');
     }
 }

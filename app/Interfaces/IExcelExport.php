@@ -4,5 +4,5 @@ namespace App\Interfaces;
 
 interface IExcelExport
 {
-    public function exportExcel();
+    public function exportExcel( $initial_date, $deadline);
 }
