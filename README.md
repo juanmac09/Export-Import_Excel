@@ -13,7 +13,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd Import-and-export-data-in-excel
+  cd Export-Import_Excel.git
 ```
 
 Start the server
