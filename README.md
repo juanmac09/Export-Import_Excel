@@ -56,6 +56,6 @@ schedule
 credentials
 
 ```bash
-  User: walter@gmail.com
-  Pass: walter@gmail.com
+  User: mateoromero0910@gmail.com
+  Pass: juan0910
 ```
